@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <title>오늘의 계절, 오늘의 노래</title>
+     <link rel="stylesheet" type="text/css" href="example.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+
+        .mytitle {
+            max-width: 100%;
+            max-height: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            overflow: auto;
+            position: fixed;
+
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://cdn.pixabay.com/photo/2017/03/18/19/58/turntable-2154823_960_720.jpg');
+            background-position: center;
+            background-size: cover;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /*.mytitle > button {*/
+        /*    width: 200px;*/
+        /*    height: 50px;*/
+
+        /*    background-color: transparent;*/
+        /*    color: white;*/
+
+        /*    border-radius: 50px;*/
+        /*    border: 1px solid white;*/
+
+        /*    margin-top: 10px;*/
+        /*}*/
+
+        /*.mytitle > button:hover {*/
+        /*    border: 2px solid white;*/
+        /*}*/
+
+        /*.mycomment {*/
+        /*    color: gray;*/
+        /*}*/
+
+        /*.mycards {*/
+        /*    margin: 20px auto 0px auto;*/
+        /*    width: 95%;*/
+        /*    max-width: 1200px;*/
+        /*}*/
+
+        /*.mypost {*/
+        /*    width: 95%;*/
+        /*    max-width: 500px;*/
+        /*    margin: 20px auto 0px auto;*/
+        /*    padding: 20px;*/
+        /*    box-shadow: 0px 0px 3px 0px gray;*/
+
+        /*    display: none;*/
+        /*}*/
+
+        /*.mybtns {*/
+        /*    display: flex;*/
+        /*    flex-direction: row;*/
+        /*    align-items: center;*/
+        /*    justify-content: center;*/
+
+        /*    margin-top: 20px;*/
+        /*}*/
+
+        /*.mybtns > button {*/
+        /*    margin-right: 10px;*/
+        /*}*/
+
+        .member_box {
+            background: linear-gradient(to left, purple 50%, white 50% );
+            width: 650px;
+            height: 450px;
+
+            border-radius: 7px;
+        }
+
+        .logo_box {
+            margin: 30px 0px auto 13px;
+            width: 300px;
+            height: 400px;
+            left: 100%;
+
+            color: white;
+            text-align: center;
+        }
+
+        .membership_box {
+            margin: -380px 0px auto 337px;
+            /*margin: 30px 0px auto 337px;*/
+            width: 300px;
+            height: 400px;
+            left: 100%;
+
+            color: white;
+            text-align: center;
+        }
+
+        .membership_box > input {
+            margin: 10px auto 0px auto;
+        }
+
+        .membership_box > button{
+            margin: 10px auto 0px auto;
+        }
+    </style>
+    <script>
+        // $(document).ready(function () {
+        //     listing();
+        // });
+        //
+        // function listing() {
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: '/movie',
+        //         data: {},
+        //         success: function (response) {
+        //
+        //         }
+        //     })
+        // }
+        //
+        // function posting() {
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: '/movie',
+        //         data: {url_give: url, star_give: star, comment_give: comment},
+        //         success: function (response) {
+        //             alert(response['msg'])
+        //             window.location.reload()
+        //         }
+        //     });
+        // }
+        //
+        // function open_box() {
+        //     $('#post-box').show()
+        // }
+        //
+        // function close_box() {
+        //     $('#post-box').hide()
+        // }
+    </script>
+</head>
+
+<body>
+
+<div class="mytitle">
+    <div class="member_box">
+        <div>
+            <h3>로그인</h3>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="mytitle">
+    <div class="member_box">
+        <div class="logo_box">
+            <div style="height:290px;"></div>
+            <button type="button" class="btn btn-outline-secondary">회원가입하기</button>
+        </div>
+
+        <div class="membership_box">
+            <h3>회원가입</h3>
+                <div style="height:15px;"> </div>
+                <form class = "form-inline" role="form">
+                    <div>
+                        <input class="form-control form-control-sm" style="width: 70%; display:inline-block;" type="text" placeholder="아이디" aria-label="id">
+                        <button type="button" class="btn btn-outline-light" style="font-size: 0.7em">중복확인</button>
+                    </div>
+                <p style="font-size: 0.5em; color: darkgrey">사용할 수 있는 아이디입니다.</p>
+                <input class="form-control form-control-sm" type="text" placeholder="비밀번호" aria-label="password">
+                <p style="font-size: 0.5em;">영문과 숫자,특수문자(!@#$%^&*) 조합의 8-20자의 비밀번호로 설정해주세요.</p>
+                <input class="form-control form-control-sm" type="text" placeholder="비밀번호 재입력" aria-label="password">
+                <p style="font-size: 0.5em;">비밀번호를 다시한번 입력해주세요.</p>
+                <button type="button" class="btn btn-light">회원가입</button>
+                </form>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!--    <div class="mytitle">-->
+<!--        <h1>내 생애 최고의 영화들</h1>-->
+<!--        <button onclick="open_box()">영화 기록하기</button>-->
+<!--    </div>-->
+<!--<div class="mypost" id="post-box">-->
+<!--    <div class="form-floating mb-3">-->
+<!--        <input id="url" type="email" class="form-control" placeholder="name@example.com">-->
+<!--        <label>영화URL</label>-->
+<!--    </div>-->
+<!--    <div class="input-group mb-3">-->
+<!--        <label class="input-group-text" for="inputGroupSelect01">별점</label>-->
+<!--        <select class="form-select" id="star">-->
+<!--            <option selected>&#45;&#45; 선택하기 &#45;&#45;</option>-->
+<!--            <option value="1">⭐</option>-->
+<!--            <option value="2">⭐⭐</option>-->
+<!--            <option value="3">⭐⭐⭐</option>-->
+<!--            <option value="4">⭐⭐⭐⭐</option>-->
+<!--            <option value="5">⭐⭐⭐⭐⭐</option>-->
+<!--        </select>-->
+<!--    </div>-->
+<!--    <div class="form-floating">-->
+<!--        <textarea id="comment" class="form-control" placeholder="Leave a comment here"></textarea>-->
+<!--        <label for="floatingTextarea2">코멘트</label>-->
+<!--    </div>-->
+<!--    <div class="mybtns">-->
+<!--        <button onclick="posting()" type="button" class="btn btn-dark">기록하기</button>-->
+<!--        <button onclick="close_box()" type="button" class="btn btn-outline-dark">닫기</button>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<!--<div class="mycards">-->
+<!--    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">-->
+<!--    </div>-->
+<!--</div>-->
+</body>
+
+</html>
