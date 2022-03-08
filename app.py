@@ -43,6 +43,9 @@ def login():
 def register():
     return render_template('joinMembership.html')
 
+@app.route('/mainpage')
+def logout():
+    return render_template('mainpage.html')
 
 #################################
 ##  로그인을 위한 API            ##
@@ -84,7 +87,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
 
