@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <title>오늘의 계절, 오늘의 노래</title>
+    <link rel="stylesheet" type="text/css" href="example.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+
+        .mytitle {
+            max-width: 100%;
+            max-height: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            overflow: auto;
+            position: fixed;
+
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1534271057238-c2c170a76672?ixlib=rb-1.2.1&ixid=MnwxM[…]G90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80');
+            background-position: center;
+            background-size: cover;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .member_box {
+            background: linear-gradient(to left, purple 50%, white 50%);
+            width: 650px;
+            height: 450px;
+
+            border-radius: 7px;
+        }
+
+        .logo_box {
+            margin: 30px 0px auto 13px;
+            width: 300px;
+            height: 400px;
+            left: 100%;
+
+            color: white;
+            text-align: center;
+        }
+
+        .membership_box {
+            margin: -380px 0px auto 337px;
+            /*margin: 30px 0px auto 337px;*/
+            width: 300px;
+            height: 400px;
+            left: 100%;
+
+            color: white;
+            text-align: center;
+        }
+
+        .membership_box > input {
+            margin: 10px auto 0px auto;
+        }
+
+        .membership_box > button {
+            margin: 10px auto 0px auto;
+        }
+    </style>
+    <script>
+        function register() {
+            $.ajax({
+                type: "POST",
+                url: "/api/register",
+                data: {
+                    id_give: $('#userid').val(),
+                    pw_give: $('#userpw').val(),
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('회원가입이 완료되었습니다.')
+                        window.location.href = '/login'
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>
+<div class="mytitle">
+    <div class="member_box">
+        <div>
+            <h3>로그인</h3>
+        </div>
+    </div>
+</div>
+<div class="mytitle">
+    <div class="member_box">
+        <div class="logo_box">
+            <div style="height:290px;"></div>
+            <button type="button" class="btn btn-outline-secondary">회원가입하기</button>
+        </div>
+        <div class="membership_box">
+            <h3>회원가입</h3>
+            <div style="height:15px;"></div>
+            <form class="form-inline" role="form">
+                <div>
+                    <input class="form-control form-control-sm" id="userid" style="width: 70%; display:inline-block;" type="text"
+                           placeholder="아이디" aria-label="id">
+                    <button type="button" class="btn btn-outline-light" style="font-size: 0.7em">중복확인</button>
+                </div>
+                <p style="font-size: 0.7em; color: darkgrey">사용할 수 있는 아이디입니다.</p>
+                <input class="form-control form-control-sm" type="text" placeholder="비밀번호" aria-label="password">
+                <p style="font-size: 0.7em;">영문과 숫자,특수문자(!@#$%^&*) 조합의 8-20자의 비밀번호로 설정해주세요.</p>
+                <input class="form-control form-control-sm" id="userpw" type="text" placeholder="비밀번호 재입력" aria-label="password">
+                <p style="font-size: 0.7em;">비밀번호를 다시한번 입력해주세요.</p>
+                <button type="button" class="btn btn-light">회원가입</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
