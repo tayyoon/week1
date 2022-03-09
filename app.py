@@ -5,12 +5,13 @@ import requests
 from bs4 import BeautifulSoup
 
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://test:sparta@cluster0.thhpe.mongodb.net/Cluster0?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://test:test@cluster0.thhpe.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.dbsparta
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    music_list = list(db.season.find({}, {'_id': False}))
+    return render_template('index.html', musics=music_list)
 
 @app.route("/music", methods=["POST"])
 def music_post():
@@ -47,6 +48,7 @@ def music_get():
 def music_get_1():
     music_list = list(db.season.find({'season': "1"}, {'_id': False}))
     return jsonify({'musics': music_list})
+    return render_template('index.html', musics=music_list)
 
 @app.route("/music/summer", methods=["GET"])
 def music_get_2():
@@ -62,6 +64,12 @@ def music_get_3():
 def music_get_4():
     music_list = list(db.season.find({'season': "4"}, {'_id': False}))
     return jsonify({'musics': music_list})
+
+
+@app.route("/", methods=["GET"])
+def music_get_11():
+    music_list = list(db.season.find({}, {'_id': False}))
+    return render_template('index2.html', musics=music_list)
 
 
 if __name__ == '__main__':
