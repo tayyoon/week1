@@ -12,6 +12,7 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <title>weather : music</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
@@ -160,10 +161,16 @@
             //listing();
         });
 
+        function logout() {
+            $.removeCookie('mytoken');
+            alert('로그아웃!')
+            window.location.href = '/login'
+        }
+
         function listing() {
             $.ajax({
                 type: 'GET',
-                url: '/mainpage/music',
+                url: '/music',
                 data: {},
                 success: function (response) {
                     let rows = response['musics']
@@ -202,7 +209,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: '/mainpage/music/spring',
+                url: '/music/spring',
                 data: {},
                 success: function (response) {
                     let rows = response['musics']
@@ -239,7 +246,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: '/mainpage/music/summer',
+                url: '/music/summer',
                 data: {},
                 success: function (response) {
                     let rows = response['musics']
@@ -276,7 +283,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: '/mainpage/music/april',
+                url: '/music/april',
                 data: {},
                 success: function (response) {
                     let rows = response['musics']
@@ -313,7 +320,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: '/mainpage/music/winter',
+                url: '/music/winter',
                 data: {},
                 success: function (response) {
                     let rows = response['musics']
@@ -352,7 +359,7 @@
             let comment = $('#comment').val()
             $.ajax({
                 type: 'POST',
-                url: '/mainpage/music',
+                url: '/music',
                 data: {url_give: url, season_give: season, comment_give: comment},
                 success: function (response) {
                     alert(response['msg'])
@@ -376,7 +383,12 @@
 <body>
     <div class="mytitle">
         <h1 onclick="window.location.href='/'">오늘의 계절, 오늘의 노래</h1>
-        <span class="status_box">000님 안녕하세요!  <button>Logout</button></span>
+        <span class="status_box">
+            {% for nickname in nickname %}
+            {{ nickname }}님 안녕하세요!
+            {% endfor %}
+            <button onclick="logout()">Logout</button>
+        </span>
     </div>
     <div class="boddy">
         <div class="btn">
@@ -408,7 +420,11 @@
         </div>
 
         <div class="categorie">
-            <button type="button" class="btn btn-outline-dark" onclick="listing_1()">spring</button>
+{#            <button type="button" class="btn btn-outline-dark" onclick="listing_1()">spring</button>#}
+{#            <button type="button" class="btn btn-outline-dark" onclick="listing_2()">summer</button>#}
+{#            <button type="button" class="btn btn-outline-dark" onclick="listing_3()">april</button>#}
+{#            <button type="button" class="btn btn-outline-dark" onclick="listing_4()">winter</button>#}
+         <button type="button" class="btn btn-outline-dark" onclick="listing_1()">spring</button>
             <button type="button" class="btn btn-outline-dark" onclick="listing_2()">summer</button>
             <button type="button" class="btn btn-outline-dark" onclick="listing_3()">april</button>
             <button type="button" class="btn btn-outline-dark" onclick="listing_4()">winter</button>
