@@ -20,7 +20,6 @@
         * {
             font-family: 'Gowun Dodum', sans-serif;
         }
-
         .mytitle {
             width: 100%;
             height: 250px;
@@ -38,6 +37,31 @@
 
             border: 1px solid rebeccapurple;
             border-radius: 20px;
+        }
+        .mytitle > h1:hover {
+            color: #E8D9FF;
+            cursor: pointer;
+        }
+
+        .status_box {
+            width:300px;
+            position: absolute;
+            top: 210px;
+            left: 85%;
+        }
+        .status_box > button {
+            border: 1px solid white;
+            border-radius: 80px;
+            background-color: transparent;
+            color: white;
+            margin-left: 5px;
+        }
+        .status_box > button:hover {
+            border: 1px solid white;
+            border-radius: 80px;
+            margin-left: 5px;
+            background-color: rgba(159, 149, 163, 0.33);
+            transform:scale(1.2); transition: transform .5s;
         }
         .boddy {
             background-color: #E8D9FF;
@@ -119,30 +143,22 @@
             margin-right: 10px;
         }
 
-        #cardsha {
-            box-shadow: 1px 1px 3px 1px grey;
+        #epilogue {
+            position: absolute;
+            left: 38%;
+            top: 90%;
         }
-
         #epilogue:hover {
-            transform:scale(1.3); transition: transform .5s;
-            background-color: transparent;
-        }
-        #epilogue-box-mom {
-            display: flex;
-        }
-        #epilogue-box {
-            border: 1px solid blue;
-            width: 80%;
-
+            background-color: rgba(217, 165, 190, 0.52);
+            font-size: larger;
+            transform:scale(1.3); transition: transform .6s;
         }
 
     </style>
     <script>
         $(document).ready(function () {
-            listing();
+            //listing();
         });
-
-        $('#epilogue-box-mom').hide();
 
         function listing() {
             $.ajax({
@@ -171,7 +187,7 @@
                                         </div>`
 
 
-                        $('#cards-box').append(temp_html)
+                        {#$('#cards-box').append(temp_html)#}
 
 
 
@@ -353,63 +369,14 @@
             $('#post-box').hide()
         }
 
-        function open_box_1() {
-            $('#epilogue-box-mom').show()
-        }
-
-        function close_box_1() {
-            $('#epilogue-box-mom').hide()
-        }
-
-                function save_comment() {
-            let name = $('#name').val()
-            let comment = $('#comment').val()
-
-            $.ajax({
-                type: 'POST',
-                url: '/homework',
-                data: {name_give: name, comment_give: comment},
-                success: function (response) {
-                    alert(response['msg'])
-                    window.location.reload()
-                }
-            })
-        }
-
-        function show_comment() {
-            $.ajax({
-                type: "GET",
-                url: "/homework",
-                data: {},
-                success: function (response) {
-                    let rows = response['fan']
-                    for (let i = 0; i < rows.length; i++) {
-                        let name = rows[i]['name']
-                        let comment = rows[i]['comment']
-
-                        let temp_html = `<div class="card">
-                                            <div class="card-body">
-                                                <blockquote class="blockquote mb-0">
-                                                    <p>${comment}</p>
-                                                    <footer class="blockquote-footer">${name}</footer>
-                                                </blockquote>
-                                            </div>
-                                        </div>`
-
-                        $('#comment-list').append(temp_html)
-                    }
-                }
-            });
-        }
-
-
     </script>
 
 </head>
 
 <body>
     <div class="mytitle">
-        <h1>오늘의 계절, 오늘의 노래</h1>
+        <h1 onclick="window.location.href='/'">오늘의 계절, 오늘의 노래</h1>
+        <span class="status_box">000님 안녕하세요!  <button>Logout</button></span>
     </div>
     <div class="boddy">
         <div class="btn">
@@ -448,35 +415,26 @@
         </div>
         <div class="mycards">
             <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
-
-            </div>
-        </div>
-
-        <div id="epilogue-box-mom">
-            <div class="mypost" id="epilogue-box">
-                <div class="col">
-                    <div class="card h-100" id="cardsha">
-                        <img src="${image}"
-                             class="card-img-top">
-                        <div class="card-body">
-                            <h4 class="card-title">${title}</h4>
-                            <h5 class="card-title">${artist}</h5>
-                            <p class="mycomment">${comment}</p>
+                {% for music in musics %}
+                    <div class="col">
+                        <div class="card h-100" id="cardsha">
+                            <img src={{ music.image }}
+                                         class="card-img-top">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ music.title }}</h4>
+                                <h5 class="card-title">{{ music.artist }}</h5>
+                                <p class="mycomment">{{ music.comment }}</p>
+                                <button type="button" class="btn btn-outline-secondary" id="epilogue"
+                                        style="width: 70px; height: 30px; color: rebeccapurple" onclick="open_box_1()">
+                                    writer
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-floating">
-                <textarea class="form-control" placeholder="Leave a comment here" id="comment2"
-                          style="height: 100px"></textarea>
-                    <label for="floatingTextarea2">응원댓글</label>
-                </div>
-                <button onclick="save_comment()" type="button" class="btn btn-dark">응원 남기기</button>
-            </div>
-            <div class="mycards" id="comment-list">
+                {% endfor %}
 
             </div>
         </div>
-
     </div>
 
 
