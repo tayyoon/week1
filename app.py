@@ -10,19 +10,19 @@ app = Flask(__name__)
 
 
 # 서버연결1
-from pymongo import MongoClient
-
-client = MongoClient("mongodb+srv://test:sparta@cluster0.qgh8x.mongodb.net/Cluster0?retryWrites=true&w=majority")
-db = client.dbsparta
+# from pymongo import MongoClient
+#
+# client = MongoClient("mongodb+srv://test:sparta@cluster0.qgh8x.mongodb.net/Cluster0?retryWrites=true&w=majority")
+# db = client.dbsparta
 
 
 # 서버연결2 (문희)
-# import pymongo
-# import certifi
-#
-# client = pymongo.MongoClient("mongodb+srv://test:sparta@cluster0.qgh8x.mongodb.net/Cluster0?retryWrites=true&w=majority",
-#     tlsCAFile=certifi.where())
-# db = client.dbsparta
+import pymongo
+import certifi
+
+client = pymongo.MongoClient("mongodb+srv://test:sparta@cluster0.qgh8x.mongodb.net/Cluster0?retryWrites=true&w=majority",
+    tlsCAFile=certifi.where())
+db = client.dbsparta
 
 
 SECRET_KEY = 'SPARTA'
@@ -125,6 +125,7 @@ def mainpage():
     music_list = list(db.season.find({}, {'_id': False}))
     return render_template('mainpage.html', musics=music_list)
 
+
 @app.route("/mainpage/music", methods=["POST"])
 def music_post():
     url_receive = request.form['url_give']
@@ -137,24 +138,27 @@ def music_post():
 
     soup = BeautifulSoup(data.text, 'html.parser')
 
-    # 여기에 코딩을 해서 meta tag를 먼저 가져와보겠습니다.
-    title = soup.select_one('meta[property="og:title"]')['content']
+    songs = soup.select('#conts > div.section_info > div > div.entry > div.info')
+
+    for title in songs:
+        title = title.select_one('div.song_name').text.replace('앨범명','').strip()
+
+    for artist in songs:
+        artist = artist.select_one('div.artist > a[title]').text
+
     img = soup.select_one('meta[property="og:image"]')['content']
 
     doc = {
         'title':title,
+        'artist': artist,
         'image':img,
         'season':season_receive,
         'comment':comment_receive
     }
-    # print(doc)
     db.season.insert_one(doc)
-    return jsonify({'msg': '저장 완료!'})
+    print(doc)
+    return jsonify({'msg':'저장 완료!'})
 
-# @app.route("/mainpage/music", methods=["GET"])
-# def music_get():
-#     music_list = list(db.season.find({}, {'_id': False}))
-#     return jsonify({'musics':music_list})
 
 @app.route("/mainpage/music/spring", methods=["GET"])
 def music_get_1():
