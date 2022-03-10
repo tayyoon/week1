@@ -174,6 +174,65 @@
             margin-left: 5px;
         }
 
+
+
+        {#    popupmodal#}
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+
+            /* 숨기기 */
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .show {
+            opacity: 1;
+            z-index: 1000;
+            transition: all 0.5s;
+        }
+
+
+        .window {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+
+            /* 임시 지정 */
+            max-width: 450px;
+            width: 60%;
+            max-height: 180px;
+            height: 40%;
+            border-radius: 10px;
+            background-color: white;
+            opacity:0.95;
+            /* 초기에 약간 아래에 배치 */
+            transform: translate(-50%, -40%);
+        }
+
+        .show .popup {
+            transform: translate(-50%, -50%);
+            transition: all 0.5s;
+        }
+
+        .musiccard:hover {
+            background-color:rgba(0, 0, 0, 0.1);
+        }
+
     </style>
     <script>
         $(document).ready(function () {
@@ -205,14 +264,8 @@
                                                 </div>
                                             </div>
                                         </div>`
-
-
                         {#$('#cards-box').append(temp_html)#}
-
-
-
                     }
-
                 }
             })
         }
@@ -245,14 +298,11 @@
                                         </div>`
 
                         $('#cards-box').append(temp_html)
-
-
-
                     }
-
                 }
             })
         }
+
         function listing_2() {
             $('#cards-box').empty();
 
@@ -281,14 +331,11 @@
                                         </div>`
 
                         $('#cards-box').append(temp_html)
-
-
-
                     }
-
                 }
             })
         }
+
         function listing_3() {
             $('#cards-box').empty();
 
@@ -317,14 +364,11 @@
                                         </div>`
 
                         $('#cards-box').append(temp_html)
-
-
-
                     }
-
                 }
             })
         }
+
         function listing_4() {
             $('#cards-box').empty();
 
@@ -353,11 +397,7 @@
                                         </div>`
 
                         $('#cards-box').append(temp_html)
-
-
-
                     }
-
                 }
             })
         }
@@ -399,18 +439,36 @@
             resultElement.innerText = number;
         }
 
+
+        function edit_comment(){
+            let new_comment = $('#new_comment').val()
+            let input_title = $('#input_title').val()
+            console.log(new_comment)
+            console.log(input_title)
+            $.ajax({
+                type: 'POST',
+                url: '/mainpage/comment',
+                data: { new_comment_give : new_comment, input_title_give : input_title},
+                success: function (response) {
+                    console.log(response)
+                    alert(response['msg'])
+                    {#페이지 수정#}
+                    window.location.href = '/mainpage'
+                }
+            });
+        }
     </script>
 
 </head>
 
 <body>
     <div class="mytitle">
-        <h1 onclick="window.location.href='/'">오늘의 계절, 오늘의 노래</h1>
+        <h1 onclick="window.location.href='/'" style="font-size: 2.2em;" >오늘의 계절, 오늘의 노래</h1>
         <span class="status_box">{{ nickname }}님 안녕하세요!  <button onclick="logout()">Logout</button></span>
     </div>
     <div class="boddy">
         <div class="btn">
-            <button onclick="open_box()">노래추천</button>
+            <button onclick="open_box()" style="background-color:rebeccapurple;"  >노래추천</button>
         </div>
         <div class="mypost" id="post-box">
             <div class="form-floating mb-3">
@@ -418,12 +476,12 @@
                 <label>URL</label>
             </div>
             <div class="input-group mb-3">
-                <label class="input-group-text" for="inputGroupSelect01">weather</label>
+                <label class="input-group-text" for="inputGroupSelect01" style="background-color: mediumpurple">weather</label>
                 <select class="form-select" id="season">
                     <option selected>-- choose --</option>
                     <option value="1">spring</option>
                     <option value="2">summer</option>
-                    <option value="3">april</option>
+                    <option value="3">autumn</option>
                     <option value="4">winter</option>
                 </select>
             </div>
@@ -432,31 +490,55 @@
                 <label for="floatingTextarea2">comment</label>
             </div>
             <div class="mybtns">
-                <button onclick="posting()" type="button" class="btn btn-dark">기록하기</button>
-                <button onclick="close_box()" type="button" class="btn btn-outline-dark">닫기</button>
+                <button onclick="posting()" type="button" class="button is-link" style="background-color:rebeccapurple;">기록하기</button>
+                <button onclick="close_box()" type="button" class="btn btn-outline-dark" style="border-color:rebeccapurple;">닫기</button>
             </div>
         </div>
 
         <div class="categorie">
             <button type="button" class="btn btn-outline-dark" onclick="listing_1()">spring</button>
             <button type="button" class="btn btn-outline-dark" onclick="listing_2()">summer</button>
-            <button type="button" class="btn btn-outline-dark" onclick="listing_3()">april</button>
+            <button type="button" class="btn btn-outline-dark" onclick="listing_3()">autumn</button>
             <button type="button" class="btn btn-outline-dark" onclick="listing_4()">winter</button>
         </div>
-        <div class="mycards">
+        <div class="mycards" id="show">
             <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
                 {% for music in musics %}
                     <div class="col">
-                        <div class="card h-100" id="cardsha">
+                        <div class="card h-100 musiccard " id="cardsha" >
                             <img src={{ music.image }}
                                          class="card-img-top">
                             <div class="card-body">
                                 <h5 class="card-title">{{ music.title }}</h5>
                                 <h5 class="card-title">{{ music.artist }}</h5>
-                                <p class="mycomment"> <i class="fa-solid fa-comment"></i>{{ music.comment }}</p>
+                                <p class="mycomment"> <i class="fa-solid fa-comment"></i> {{ music.comment }}</p>
                                 <div class="likebtn">
                                     <button onclick='count("plus")' value="+">❤️<span id="result({{ num }})">0</span></button>
                                 </div>
+                                {# popup#}
+                                <div class="background">
+                                        <div class="window" id="edit_comment">
+                                            <div class="popup">
+                                                 <div class="modal-header">
+                                                     <h5 class="modal-title"> <i class="fa-solid fa-comment"></i> comment </h5>
+                                                     <button onclick="location.href='/mainpage'" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                 </div>
+                                                 <div class="modal-body">
+                                                     <input id="input_title" class="form-control form-control" style="width: 82%; display:inline-block;" type="text" placeholder="title">
+                                                     <div style="height:10px;"></div>
+                                                     <form class = "form-inline" role="form">
+                                                         <div style="align-items: center;">
+                                                             <input id="new_comment" class="form-control form-control" style="width: 82%; display:inline-block;" type="text" placeholder="comment">
+                                                             <button onclick="edit_comment()" type="button" class="button is-link" style="font-size: 1em; background-color: rebeccapurple">수정</button>
+                                                         </div>
+                                                     </form>
+                                                 </div>
+                                            </div>
+                                        <div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -465,7 +547,18 @@
         </div>
     </div>
 
+<script>
+      function show() {
+        document.querySelector(".background").className = "background show";
+      }
 
+      function close() {
+        document.querySelector(".background").className = "background";
+      }
+
+      document.querySelector("#show").addEventListener("click", show);
+      document.querySelector("#close").addEventListener("click", close);
+</script>
 </body>
 
 </html>
