@@ -33,9 +33,9 @@ def home():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.user.find_one({"id": payload['id']})
-
-        return render_template('mainpage.html', nickname=user_info["nickname"])
+        user_info = db.user.find_one({"username": payload['id']})
+        music_list = list(db.season.find({}, {'_id': False}))
+        return render_template('index.html', nickname=user_info["nickname"], musics=music_list)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login"))
     except jwt.exceptions.DecodeError:
@@ -44,12 +44,12 @@ def home():
 
 @app.route('/login')
 def login():
-    # msg = request.args.get("msg")
-    return render_template('membership.html')
+    msg = request.args.get("msg")
+    return render_template('login.html', msg=msg)
 
-@app.route('/register')
+@app.route('/login')
 def register():
-    return render_template('membership.html')
+    return render_template('login.html')
 
 
 @app.route('/sign_up/save', methods=['POST'])
@@ -58,7 +58,9 @@ def sign_up():
     password_receive = request.form['password_give']
     nickname_receive = request.form['nickname_give']
 
+    print('1',password_receive)
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    print('1',password_hash)
     doc = {
         "username": username_receive,
         "password": password_hash,
@@ -74,7 +76,7 @@ def check_dup():
     exists = bool(db.user.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def sign_in():
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
@@ -88,8 +90,8 @@ def sign_in():
             'id': username_receive,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
         }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-            # .decode("utf-8")
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode("utf-8")
+
         return jsonify({'result': 'success', 'token': token})
 
     else:
@@ -105,6 +107,7 @@ def api_valid():
 
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        print(payload)
 
         userinfo = db.user.find_one({'username': payload['username']}, {'_id': 0})
         return jsonify({'result': 'success', 'nickname': userinfo['nick']})
@@ -113,14 +116,25 @@ def api_valid():
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
+# @app.route('/mainpage/logout')
+# def logout():
+#     return render_template('index.html') ##########################################작업필요
 
-@app.route('/mainpage')
+@app.route('/index')
 def mainpage():
-    music_list = list(db.season.find({}, {'_id': False}))
-    return render_template('mainpage.html', musics=music_list)
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"username": payload['id']})
+        music_list = list(db.season.find({}, {'_id': False}))
+        return render_template('index.html', nickname=user_info["nickname"], musics=music_list)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login"))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 해주시기 바랍니다."))
 
 
-@app.route("/mainpage/music", methods=["POST"])
+@app.route("/index/music", methods=["POST"])
 def music_post():
     url_receive = request.form['url_give']
     season_receive = request.form['season_give']
@@ -150,46 +164,32 @@ def music_post():
         'comment':comment_receive
     }
     db.season.insert_one(doc)
-
+    print(doc)
     return jsonify({'msg':'저장 완료!'})
 
 
-@app.route("/mainpage/music/spring", methods=["GET"])
+@app.route("/index/music/spring", methods=["GET"])
 def music_get_1():
     music_list = list(db.season.find({'season': "1"}, {'_id': False}))
     return jsonify({'musics': music_list})
+    return render_template('index.html', musics=music_list)
 
-@app.route("/mainpage/music/summer", methods=["GET"])
+@app.route("/index/music/summer", methods=["GET"])
 def music_get_2():
     music_list = list(db.season.find({'season': "2"}, {'_id': False}))
     return jsonify({'musics': music_list})
 
-@app.route("/mainpage/music/april", methods=["GET"])
+@app.route("/index/music/april", methods=["GET"])
 def music_get_3():
     music_list = list(db.season.find({'season': "3"}, {'_id': False}))
     return jsonify({'musics': music_list})
 
-@app.route("/mainpage/music/winter", methods=["GET"])
+@app.route("/index/music/winter", methods=["GET"])
 def music_get_4():
     music_list = list(db.season.find({'season': "4"}, {'_id': False}))
     return jsonify({'musics': music_list})
 
-@app.route("/mainpage/comment", methods=["POST"])
-def edit_comment():
-    comment_receive = request.form['new_comment_give']
-    title_receive = request.form['input_title_give']
-    find_title = db.season.find_one({'title': title_receive})['title']
-    if find_title == title_receive:
-        db.season.update_one({'title': title_receive}, {'$set': {'comment': comment_receive}})
-        return jsonify({'msg': '저장 완료!'})
-    else:
-        return jsonify({'msg': '음악을 찾을 수 없습니다.'})
 
-
-@app.route("/", methods=["GET"])
-def music_get_11():
-    music_list = list(db.season.find({}, {'_id': False}))
-    return render_template('index2.html', musics=music_list)
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
