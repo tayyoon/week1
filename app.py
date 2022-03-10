@@ -16,7 +16,7 @@ app = Flask(__name__)
 # db = client.dbsparta
 
 
-# 서버연결2 (문희)
+# 서버연결2
 import pymongo
 import certifi
 
@@ -41,7 +41,7 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 해주시기 바랍니다."))
 
-
+# 로그인
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
@@ -51,7 +51,7 @@ def login():
 def register():
     return render_template('login.html')
 
-
+# 회원가입
 @app.route('/sign_up/save', methods=['POST'])
 def sign_up():
     username_receive = request.form['username_give']
@@ -69,12 +69,13 @@ def sign_up():
     db.user.insert_one(doc)
     return jsonify({'result': 'success'})
 
-
+# 회원가입(중복확인)
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
     username_receive = request.form['username_give']
     exists = bool(db.user.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
+
 # 로그인 시 로그인 정보 데이터베이스 내 자료들과 확인 후 로그인 여부 결정
 @app.route('/api/login', methods=['POST'])
 def sign_in():
@@ -116,10 +117,7 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
-
-# @app.route('/mainpage/logout')
-# def logout():
-#     return render_template('index.html') ##########################################작업필요
+    
 
 @app.route('/index')
 def mainpage():
