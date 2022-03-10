@@ -12,149 +12,15 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <title>weather : music</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+{#    스타일 링크 #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="https://kit.fontawesome.com/16f9b2953e.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/css/mainstyle.css">
 
-    <style>
-        * {
-            font-family: 'Gowun Dodum', sans-serif;
-        }
-        .mytitle {
-            width: 100%;
-            height: 250px;
-
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1534271057238-c2c170a76672?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80');
-            background-position: center;
-            background-size: cover;
-
-            color: white;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            border: 1px solid rebeccapurple;
-            border-radius: 20px;
-        }
-        .mytitle > h1:hover {
-            color: #E8D9FF;
-            cursor: pointer;
-        }
-
-        .status_box {
-            width:300px;
-            position: absolute;
-            top: 210px;
-            left: 85%;
-        }
-        .status_box > button {
-            border: 1px solid white;
-            border-radius: 80px;
-            background-color: transparent;
-            color: white;
-            margin-left: 5px;
-        }
-        .status_box > button:hover {
-            border: 1px solid white;
-            border-radius: 80px;
-            margin-left: 5px;
-            background-color: rgba(159, 149, 163, 0.33);
-            transform:scale(1.2); transition: transform .5s;
-        }
-        .boddy {
-            background-color: #E8D9FF;
-            border-radius: 20px;
-            margin-top: 5px;
-            border: 1px solid rebeccapurple;
-        }
-        .btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn > button {
-            width: 200px;
-            height: 50px;
-
-            background-color: purple;
-            color: white;
-
-            border-radius: 50px;
-            border: 1px solid white;
-
-            margin-top: 10px;
-
-        }
-
-        .btn > button:hover {
-            border: 2px solid white;
-        }
-
-        .mycomment {
-            color: gray;
-        }
-        .categorie {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-
-            margin-top: 20px;
-        }
-        .categorie > button {
-            margin-right: 10px;
-            color: rebeccapurple;
-            border-color: rebeccapurple;
-        }
-
-        .categorie > button:hover {
-            background-color: khaki;
-        }
-        .mycards {
-            margin: 20px auto 0px auto;
-            width: 95%;
-            max-width: 1200px;
-        }
-
-        .mypost {
-            width: 95%;
-            max-width: 500px;
-            margin: 20px auto 0px auto;
-            padding: 20px;
-            box-shadow: 0px 0px 3px 0px gray;
-
-            display: none;
-        }
-
-        .mybtns {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-
-            margin-top: 20px;
-        }
-
-        .mybtns > button {
-            margin-right: 10px;
-        }
-
-        #epilogue {
-            position: absolute;
-            left: 38%;
-            top: 90%;
-        }
-        #epilogue:hover {
-            background-color: rgba(217, 165, 190, 0.52);
-            font-size: larger;
-            transform:scale(1.3); transition: transform .6s;
-        }
-
-    </style>
     <script>
         $(document).ready(function () {
             //listing();
@@ -163,7 +29,7 @@
         function listing() {
             $.ajax({
                 type: 'GET',
-                url: '/music',
+                url: '/index/music',
                 data: {},
                 success: function (response) {
                     let rows = response['musics']
@@ -185,14 +51,8 @@
                                                 </div>
                                             </div>
                                         </div>`
-
-
                         {#$('#cards-box').append(temp_html)#}
-
-
-
                     }
-
                 }
             })
         }
@@ -202,15 +62,15 @@
 
             $.ajax({
                 type: 'GET',
-                url: '/music/spring',
+                url: '/index/music/spring',
                 data: {},
                 success: function (response) {
                     let rows = response['musics']
                     for (let i = 0; i < rows.length; i++) {
                         let comment = rows[i]['comment']
                         let image = rows[i]['image']
-                        let title = rows[i]['title'].split('-')[0]
-                        let artist = rows[i]['title'].split('-')[1]
+                        let title = rows[i]['title']
+                        let artist = rows[i]['artist']
 
                         let temp_html = `<div class="col">
                                             <div class="card h-100">
@@ -219,35 +79,31 @@
                                                 <div class="card-body">
                                                     <h4 class="card-title">${title}</h4>
                                                     <h5 class="card-title">${artist}</h5>
-                                                    <p class="mycomment">${comment}</p>
-                                                    <button type="button" class="btn btn-outline-secondary" id="epilogue" style="width: 70px; height: 30px; color: rebeccapurple">writer</button>
+                                                    <p class="mycomment"><i class="fa-solid fa-comment"></i> ${comment} </p>
                                                 </div>
                                             </div>
                                         </div>`
 
                         $('#cards-box').append(temp_html)
-
-
-
                     }
-
                 }
             })
         }
+
         function listing_2() {
             $('#cards-box').empty();
 
             $.ajax({
                 type: 'GET',
-                url: '/music/summer',
+                url: '/index/music/summer',
                 data: {},
                 success: function (response) {
                     let rows = response['musics']
                     for (let i = 0; i < rows.length; i++) {
                         let comment = rows[i]['comment']
                         let image = rows[i]['image']
-                        let title = rows[i]['title'].split('-')[0]
-                        let artist = rows[i]['title'].split('-')[1]
+                        let title = rows[i]['title']
+                        let artist = rows[i]['artist']
 
                         let temp_html = `<div class="col">
                                             <div class="card h-100">
@@ -256,35 +112,31 @@
                                                 <div class="card-body">
                                                     <h4 class="card-title">${title}</h4>
                                                     <h5 class="card-title">${artist}</h5>
-                                                    <p class="mycomment">${comment}</p>
-                                                    <button type="button" class="btn btn-outline-secondary" id="epilogue" style="width: 70px; height: 30px; color: rebeccapurple">writer</button>
+                                                    <p class="mycomment"><i class="fa-solid fa-comment"></i> ${comment} </p>
                                                 </div>
                                             </div>
                                         </div>`
 
                         $('#cards-box').append(temp_html)
-
-
-
                     }
-
                 }
             })
         }
+
         function listing_3() {
             $('#cards-box').empty();
 
             $.ajax({
                 type: 'GET',
-                url: '/music/april',
+                url: '/index/music/april',
                 data: {},
                 success: function (response) {
                     let rows = response['musics']
                     for (let i = 0; i < rows.length; i++) {
                         let comment = rows[i]['comment']
                         let image = rows[i]['image']
-                        let title = rows[i]['title'].split('-')[0]
-                        let artist = rows[i]['title'].split('-')[1]
+                        let title = rows[i]['title']
+                        let artist = rows[i]['artist']
 
                         let temp_html = `<div class="col">
                                             <div class="card h-100">
@@ -293,35 +145,31 @@
                                                 <div class="card-body">
                                                     <h4 class="card-title">${title}</h4>
                                                     <h5 class="card-title">${artist}</h5>
-                                                    <p class="mycomment">${comment}</p>
-                                                    <button type="button" class="btn btn-outline-secondary" id="epilogue" style="width: 70px; height: 30px; color: rebeccapurple">wirter</button>
+                                                    <p class="mycomment"><i class="fa-solid fa-comment"></i> ${comment} </p>
                                                 </div>
                                             </div>
                                         </div>`
 
                         $('#cards-box').append(temp_html)
-
-
-
                     }
-
                 }
             })
         }
+
         function listing_4() {
             $('#cards-box').empty();
 
             $.ajax({
                 type: 'GET',
-                url: '/music/winter',
+                url: '/index/music/winter',
                 data: {},
                 success: function (response) {
                     let rows = response['musics']
                     for (let i = 0; i < rows.length; i++) {
                         let comment = rows[i]['comment']
                         let image = rows[i]['image']
-                        let title = rows[i]['title'].split('-')[0]
-                        let artist = rows[i]['title'].split('-')[1]
+                        let title = rows[i]['title']
+                        let artist = rows[i]['artist']
 
                         let temp_html = `<div class="col">
                                             <div class="card h-100">
@@ -330,18 +178,13 @@
                                                 <div class="card-body">
                                                     <h4 class="card-title">${title}</h4>
                                                     <h5 class="card-title">${artist}</h5>
-                                                    <p class="mycomment">${comment}</p>
-                                                    <button type="button" class="btn btn-outline-secondary" id="epilogue" style="width: 70px; height: 30px; color: rebeccapurple">writer</button>
+                                                    <p class="mycomment"><i class="fa-solid fa-comment"></i> ${comment} </p>
                                                 </div>
                                             </div>
                                         </div>`
 
                         $('#cards-box').append(temp_html)
-
-
-
                     }
-
                 }
             })
         }
@@ -352,7 +195,7 @@
             let comment = $('#comment').val()
             $.ajax({
                 type: 'POST',
-                url: '/music',
+                url: '/index/music',
                 data: {url_give: url, season_give: season, comment_give: comment},
                 success: function (response) {
                     alert(response['msg'])
@@ -368,19 +211,51 @@
         function close_box() {
             $('#post-box').hide()
         }
+        function logout() {
+            $.removeCookie('mytoken');
+            alert('로그아웃!')
+            window.location.href = '/login'
+        }
 
+        function count(type) {
+            const resultElement = document.getElementById('result(num)');
+            let number = resultElement.innerText;
+            if(type === 'plus') {
+                number = parseInt(number) + 1;
+            }
+            resultElement.innerText = number;
+        }
+
+
+        function edit_comment(){
+            let new_comment = $('#new_comment').val()
+            let input_title = $('#input_title').val()
+            console.log(new_comment)
+            console.log(input_title)
+            $.ajax({
+                type: 'POST',
+                url: '/index/comment',
+                data: { new_comment_give : new_comment, input_title_give : input_title},
+                success: function (response) {
+                    console.log(response)
+                    alert(response['msg'])
+                    {#페이지 수정#}
+                    window.location.href = '/'
+                }
+            });
+        }
     </script>
 
 </head>
 
 <body>
     <div class="mytitle">
-        <h1 onclick="window.location.href='/'">오늘의 계절, 오늘의 노래</h1>
-        <span class="status_box">000님 안녕하세요!  <button>Logout</button></span>
+        <h1 onclick="window.location.href='/'" style="font-size: 2.2em;" >오늘의 계절, 오늘의 노래</h1>
+        <span class="status_box">{{ nickname }}님 안녕하세요!  <button onclick="logout()">Logout</button></span>
     </div>
     <div class="boddy">
         <div class="btn">
-            <button onclick="open_box()">노래추천</button>
+            <button onclick="open_box()" style="background-color:rebeccapurple;"  >노래추천</button>
         </div>
         <div class="mypost" id="post-box">
             <div class="form-floating mb-3">
@@ -388,12 +263,12 @@
                 <label>URL</label>
             </div>
             <div class="input-group mb-3">
-                <label class="input-group-text" for="inputGroupSelect01">weather</label>
+                <label class="input-group-text" for="inputGroupSelect01" style="background-color: mediumpurple">weather</label>
                 <select class="form-select" id="season">
                     <option selected>-- choose --</option>
                     <option value="1">spring</option>
                     <option value="2">summer</option>
-                    <option value="3">april</option>
+                    <option value="3">autumn</option>
                     <option value="4">winter</option>
                 </select>
             </div>
@@ -402,42 +277,75 @@
                 <label for="floatingTextarea2">comment</label>
             </div>
             <div class="mybtns">
-                <button onclick="posting()" type="button" class="btn btn-dark">기록하기</button>
-                <button onclick="close_box()" type="button" class="btn btn-outline-dark">닫기</button>
+                <button onclick="posting()" type="button" class="button is-link" style="background-color:rebeccapurple;">기록하기</button>
+                <button onclick="close_box()" type="button" class="btn btn-outline-dark" style="border-color:rebeccapurple;">닫기</button>
             </div>
         </div>
 
         <div class="categorie">
             <button type="button" class="btn btn-outline-dark" onclick="listing_1()">spring</button>
             <button type="button" class="btn btn-outline-dark" onclick="listing_2()">summer</button>
-            <button type="button" class="btn btn-outline-dark" onclick="listing_3()">april</button>
+            <button type="button" class="btn btn-outline-dark" onclick="listing_3()">autumn</button>
             <button type="button" class="btn btn-outline-dark" onclick="listing_4()">winter</button>
         </div>
-        <div class="mycards">
+        <div class="mycards" id="show">
             <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
                 {% for music in musics %}
                     <div class="col">
-                        <div class="card h-100" id="cardsha">
+                        <div class="card h-100 musiccard " id="cardsha" >
                             <img src={{ music.image }}
                                          class="card-img-top">
                             <div class="card-body">
-                                <h4 class="card-title">{{ music.title }}</h4>
+                                <h5 class="card-title">{{ music.title }}</h5>
                                 <h5 class="card-title">{{ music.artist }}</h5>
-                                <p class="mycomment">{{ music.comment }}</p>
-                                <button type="button" class="btn btn-outline-secondary" id="epilogue"
-                                        style="width: 70px; height: 30px; color: rebeccapurple" onclick="open_box_1()">
-                                    writer
-                                </button>
+                                <p class="mycomment"> <i class="fa-solid fa-comment"></i> {{ music.comment }}</p>
+                                <div class="likebtn">
+                                    <button onclick='count("plus")' value="+">❤️<span id="result({{ num }})">0</span></button>
+                                </div>
+                                {# popup#}
+                                <div class="background">
+                                        <div class="window" id="edit_comment">
+                                            <div class="popup">
+                                                 <div class="modal-header">
+                                                     <h5 class="modal-title"> <i class="fa-solid fa-comment"></i> comment </h5>
+                                                     <button onclick="location.href='/'" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                 </div>
+                                                 <div class="modal-body">
+                                                     <input id="input_title" class="form-control form-control" style="width: 82%; display:inline-block;" type="text" placeholder="title">
+                                                     <div style="height:10px;"></div>
+                                                     <form class = "form-inline" role="form">
+                                                         <div style="align-items: center;">
+                                                             <input id="new_comment" class="form-control form-control" style="width: 82%; display:inline-block;" type="text" placeholder="comment">
+                                                             <button onclick="edit_comment()" type="button" class="button is-link" style="font-size: 1em; background-color: rebeccapurple">수정</button>
+                                                         </div>
+                                                     </form>
+                                                 </div>
+                                            </div>
+                                        <div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 {% endfor %}
-
             </div>
         </div>
     </div>
 
+<script>
+      function show() {
+        document.querySelector(".background").className = "background show";
+      }
 
+      function close() {
+        document.querySelector(".background").className = "background";
+      }
+
+      document.querySelector("#show").addEventListener("click", show);
+      document.querySelector("#close").addEventListener("click", close);
+</script>
 </body>
 
 </html>
