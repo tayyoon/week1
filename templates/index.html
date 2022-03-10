@@ -16,7 +16,7 @@
     <title>weather : music</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
-{#    스타일 링크 #}
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <script src="https://kit.fontawesome.com/16f9b2953e.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/static/css/mainstyle.css">
@@ -56,7 +56,8 @@
                 }
             })
         }
-
+        
+// 계절에 해당하는 카드를 찾아서 보여주는 함수
         function listing_1() {
             $('#cards-box').empty();
 
@@ -189,6 +190,7 @@
             })
         }
 
+//         노래 추천 포스트 작성하기
         function posting() {
             let url = $('#url').val()
             let season = $('#season').val()
@@ -217,16 +219,16 @@
             window.location.href = '/login'
         }
 
-        function count(type) {
-            const resultElement = document.getElementById('result(num)');
-            let number = resultElement.innerText;
-            if(type === 'plus') {
-                number = parseInt(number) + 1;
-            }
-            resultElement.innerText = number;
-        }
+//         function count(type) {
+//             const resultElement = document.getElementById('result(num)');
+//             let number = resultElement.innerText;
+//             if(type === 'plus') {
+//                 number = parseInt(number) + 1;
+//             }
+//             resultElement.innerText = number;
+//         }
 
-
+//         코멘트 수정하기
         function edit_comment(){
             let new_comment = $('#new_comment').val()
             let input_title = $('#input_title').val()
@@ -253,10 +255,12 @@
         <h1 onclick="window.location.href='/'" style="font-size: 2.2em;" >오늘의 계절, 오늘의 노래</h1>
         <span class="status_box">{{ nickname }}님 안녕하세요!  <button onclick="logout()">Logout</button></span>
     </div>
+<!--     노래추천 버튼 -->
     <div class="boddy">
         <div class="btn">
             <button onclick="open_box()" style="background-color:rebeccapurple;"  >노래추천</button>
         </div>
+<!--         추천박스 -->
         <div class="mypost" id="post-box">
             <div class="form-floating mb-3">
                 <input id="url" type="email" class="form-control" placeholder="name@example.com">
@@ -281,13 +285,14 @@
                 <button onclick="close_box()" type="button" class="btn btn-outline-dark" style="border-color:rebeccapurple;">닫기</button>
             </div>
         </div>
-
+<!--         계절별 버튼 -->
         <div class="categorie">
             <button type="button" class="btn btn-outline-dark" onclick="listing_1()">spring</button>
             <button type="button" class="btn btn-outline-dark" onclick="listing_2()">summer</button>
             <button type="button" class="btn btn-outline-dark" onclick="listing_3()">autumn</button>
             <button type="button" class="btn btn-outline-dark" onclick="listing_4()">winter</button>
         </div>
+<!--         추천된 카드들 -->
         <div class="mycards" id="show">
             <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
                 {% for music in musics %}
@@ -302,7 +307,7 @@
                                 <div class="likebtn">
                                     <button onclick='count("plus")' value="+">❤️<span id="result({{ num }})">0</span></button>
                                 </div>
-                                {# popup#}
+<!--                                 코멘트 수정 팝업 -->
                                 <div class="background">
                                         <div class="window" id="edit_comment">
                                             <div class="popup">
@@ -333,7 +338,7 @@
             </div>
         </div>
     </div>
-
+<!-- 코멘트 수정 모달 스크립트 -->
 <script>
       function show() {
         document.querySelector(".background").className = "background show";
