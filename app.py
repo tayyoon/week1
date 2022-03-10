@@ -27,7 +27,7 @@ db = client.dbsparta
 
 SECRET_KEY = 'SPARTA'
 
-
+#홈페이지 접속 시 토큰으로 유저확인 -> 토큰 없을 시 로그인페이지로 이동
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
@@ -118,7 +118,7 @@ def api_valid():
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
     
-
+#메인페이지를 토큰 받은 유저만 접속할 수 있다
 @app.route('/index')
 def mainpage():
     token_receive = request.cookies.get('mytoken')
@@ -132,7 +132,7 @@ def mainpage():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 해주시기 바랍니다."))
 
-
+#포스트 입력란 데이터 가져오기 & 뮤직 사이트 크롤링 해서 데이터 
 @app.route("/index/music", methods=["POST"])
 def music_post():
     url_receive = request.form['url_give']
@@ -188,8 +188,8 @@ def music_get_4():
     music_list = list(db.season.find({'season': "4"}, {'_id': False}))
     return jsonify({'musics': music_list})
 
-@app.route("/index/comment", methods=["POST"])
-    # 달려있는 코멘트 수정 
+# 달려있는 코멘트 수정
+@app.route("/index/comment", methods=["POST"]) 
 def edit_comment():
     comment_receive = request.form['new_comment_give']
     title_receive = request.form['input_title_give']
