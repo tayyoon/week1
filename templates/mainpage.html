@@ -447,12 +447,12 @@
             console.log(input_title)
             $.ajax({
                 type: 'POST',
-                url: '/mainpage/comment',
+                url: '/index/comment',
                 data: { new_comment_give : new_comment, input_title_give : input_title},
                 success: function (response) {
                     console.log(response)
                     alert(response['msg'])
-                    {#페이지 수정#}
+                   
                     window.location.href = '/mainpage'
                 }
             });
