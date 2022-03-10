@@ -75,7 +75,7 @@ def check_dup():
     username_receive = request.form['username_give']
     exists = bool(db.user.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
-
+# 로그인 시 로그인 정보 데이터베이스 내 자료들과 확인 후 로그인 여부 결정
 @app.route('/api/login', methods=['POST'])
 def sign_in():
     username_receive = request.form['username_give']
@@ -91,6 +91,7 @@ def sign_in():
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode("utf-8")
+        # localhost 실행시 .decode() 제거 필요
 
         return jsonify({'result': 'success', 'token': token})
 
@@ -167,7 +168,7 @@ def music_post():
     print(doc)
     return jsonify({'msg':'저장 완료!'})
 
-
+# 각 계절마다 그 계절의 조건에 맞는 데이터 가져가서 리스팅
 @app.route("/index/music/spring", methods=["GET"])
 def music_get_1():
     music_list = list(db.season.find({'season': "1"}, {'_id': False}))
@@ -190,6 +191,7 @@ def music_get_4():
     return jsonify({'musics': music_list})
 
 @app.route("/index/comment", methods=["POST"])
+    # 달려있는 코멘트 수정 
 def edit_comment():
     comment_receive = request.form['new_comment_give']
     title_receive = request.form['input_title_give']
