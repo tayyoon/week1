@@ -189,6 +189,16 @@ def music_get_4():
     music_list = list(db.season.find({'season': "4"}, {'_id': False}))
     return jsonify({'musics': music_list})
 
+@app.route("/index/comment", methods=["POST"])
+def edit_comment():
+    comment_receive = request.form['new_comment_give']
+    title_receive = request.form['input_title_give']
+    find_title = db.season.find_one({'title': title_receive})['title']
+    if find_title == title_receive:
+        db.season.update_one({'title': title_receive}, {'$set': {'comment': comment_receive}})
+        return jsonify({'msg': '저장 완료!'})
+    else:
+        return jsonify({'msg': '음악을 찾을 수 없습니다.'})
 
 
 if __name__ == '__main__':
