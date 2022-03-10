@@ -10,19 +10,19 @@ app = Flask(__name__)
 
 
 # 서버연결1
-# from pymongo import MongoClient
-#
-# client = MongoClient("mongodb+srv://test:sparta@cluster0.qgh8x.mongodb.net/Cluster0?retryWrites=true&w=majority")
-# db = client.dbsparta
+from pymongo import MongoClient
+
+client = MongoClient("mongodb+srv://test:sparta@cluster0.qgh8x.mongodb.net/Cluster0?retryWrites=true&w=majority")
+db = client.dbsparta
 
 
 # 서버연결2 (문희)
-import pymongo
-import certifi
-
-client = pymongo.MongoClient("mongodb+srv://test:sparta@cluster0.qgh8x.mongodb.net/Cluster0?retryWrites=true&w=majority",
-    tlsCAFile=certifi.where())
-db = client.dbsparta
+# import pymongo
+# import certifi
+#
+# client = pymongo.MongoClient("mongodb+srv://test:sparta@cluster0.qgh8x.mongodb.net/Cluster0?retryWrites=true&w=majority",
+#     tlsCAFile=certifi.where())
+# db = client.dbsparta
 
 
 SECRET_KEY = 'SPARTA'
@@ -34,7 +34,8 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.user.find_one({"id": payload['id']})
-        return render_template('mainpage.html', nickname=user_info["nick"])
+        print(user_info["nickname"])
+        return render_template('mainpage.html', nickname=user_info["nickname"])
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login"))
     except jwt.exceptions.DecodeError:
@@ -43,8 +44,8 @@ def home():
 
 @app.route('/login')
 def login():
-    msg = request.args.get("msg")
-    return render_template('membership.html', msg=msg)
+    # msg = request.args.get("msg")
+    return render_template('membership.html')
 
 @app.route('/register')
 def register():
@@ -75,8 +76,8 @@ def check_dup():
     exists = bool(db.user.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
-@app.route('/api/login', methods=['POST'])
-def api_login():
+@app.route('/login', methods=['POST'])
+def sign_in():
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
     print('2',password_receive)
@@ -90,6 +91,7 @@ def api_login():
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+            # .decode("utf-8")
         return jsonify({'result': 'success', 'token': token})
 
     else:
