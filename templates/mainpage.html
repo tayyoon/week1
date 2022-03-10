@@ -16,6 +16,9 @@
     <title>weather : music</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+{#    스타일 링크 #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="https://kit.fontawesome.com/16f9b2953e.js" crossorigin="anonymous"></script>
 
     <style>
         * {
@@ -46,9 +49,11 @@
 
         .status_box {
             width:300px;
+            margin: 210px -90px auto auto;
             position: absolute;
-            top: 210px;
-            left: 85%;
+            top: 0px;
+            right: 0px;
+            display:flex;
         }
         .status_box > button {
             border: 1px solid white;
@@ -65,10 +70,12 @@
             transform:scale(1.2); transition: transform .5s;
         }
         .boddy {
-            background-color: #E8D9FF;
+             background-color: #E8D9FF;
             border-radius: 20px;
             margin-top: 5px;
             border: 1px solid rebeccapurple;
+            height: 100%;
+            padding-bottom: 100px;
         }
         .btn {
             display: flex;
@@ -222,8 +229,8 @@
                     for (let i = 0; i < rows.length; i++) {
                         let comment = rows[i]['comment']
                         let image = rows[i]['image']
-                        let title = rows[i]['title'].split('-')[0]
-                        let artist = rows[i]['title'].split('-')[1]
+                        let title = rows[i]['title']
+                        let artist = rows[i]['artist']
 
                         let temp_html = `<div class="col">
                                             <div class="card h-100">
@@ -232,8 +239,7 @@
                                                 <div class="card-body">
                                                     <h4 class="card-title">${title}</h4>
                                                     <h5 class="card-title">${artist}</h5>
-                                                    <p class="mycomment">${comment}</p>
-                                                    <button type="button" class="btn btn-outline-secondary" id="epilogue" style="width: 70px; height: 30px; color: rebeccapurple">writer</button>
+                                                    <p class="mycomment"><i class="fa-solid fa-comment"></i> ${comment} </p>
                                                 </div>
                                             </div>
                                         </div>`
@@ -259,8 +265,8 @@
                     for (let i = 0; i < rows.length; i++) {
                         let comment = rows[i]['comment']
                         let image = rows[i]['image']
-                        let title = rows[i]['title'].split('-')[0]
-                        let artist = rows[i]['title'].split('-')[1]
+                        let title = rows[i]['title']
+                        let artist = rows[i]['artist']
 
                         let temp_html = `<div class="col">
                                             <div class="card h-100">
@@ -269,8 +275,7 @@
                                                 <div class="card-body">
                                                     <h4 class="card-title">${title}</h4>
                                                     <h5 class="card-title">${artist}</h5>
-                                                    <p class="mycomment">${comment}</p>
-                                                    <button type="button" class="btn btn-outline-secondary" id="epilogue" style="width: 70px; height: 30px; color: rebeccapurple">writer</button>
+                                                    <p class="mycomment"><i class="fa-solid fa-comment"></i> ${comment} </p>
                                                 </div>
                                             </div>
                                         </div>`
@@ -296,8 +301,8 @@
                     for (let i = 0; i < rows.length; i++) {
                         let comment = rows[i]['comment']
                         let image = rows[i]['image']
-                        let title = rows[i]['title'].split('-')[0]
-                        let artist = rows[i]['title'].split('-')[1]
+                        let title = rows[i]['title']
+                        let artist = rows[i]['artist']
 
                         let temp_html = `<div class="col">
                                             <div class="card h-100">
@@ -306,8 +311,7 @@
                                                 <div class="card-body">
                                                     <h4 class="card-title">${title}</h4>
                                                     <h5 class="card-title">${artist}</h5>
-                                                    <p class="mycomment">${comment}</p>
-                                                    <button type="button" class="btn btn-outline-secondary" id="epilogue" style="width: 70px; height: 30px; color: rebeccapurple">wirter</button>
+                                                    <p class="mycomment"><i class="fa-solid fa-comment"></i> ${comment} </p>
                                                 </div>
                                             </div>
                                         </div>`
@@ -333,8 +337,8 @@
                     for (let i = 0; i < rows.length; i++) {
                         let comment = rows[i]['comment']
                         let image = rows[i]['image']
-                        let title = rows[i]['title'].split('-')[0]
-                        let artist = rows[i]['title'].split('-')[1]
+                        let title = rows[i]['title']
+                        let artist = rows[i]['artist']
 
                         let temp_html = `<div class="col">
                                             <div class="card h-100">
@@ -343,8 +347,7 @@
                                                 <div class="card-body">
                                                     <h4 class="card-title">${title}</h4>
                                                     <h5 class="card-title">${artist}</h5>
-                                                    <p class="mycomment">${comment}</p>
-                                                    <button type="button" class="btn btn-outline-secondary" id="epilogue" style="width: 70px; height: 30px; color: rebeccapurple">writer</button>
+                                                    <p class="mycomment"><i class="fa-solid fa-comment"></i> ${comment} </p>
                                                 </div>
                                             </div>
                                         </div>`
@@ -449,9 +452,8 @@
                                          class="card-img-top">
                             <div class="card-body">
                                 <h5 class="card-title">{{ music.title }}</h5>
-                                <div class="mycomment">
-                                    <p>{{ music.comment }}</p>
-                                </div>
+                                <h5 class="card-title">{{ music.artist }}</h5>
+                                <p class="mycomment"> <i class="fa-solid fa-comment"></i>{{ music.comment }}</p>
                                 <div class="likebtn">
                                     <button onclick='count("plus")' value="+">❤️<span id="result({{ num }})">0</span></button>
                                 </div>
@@ -459,7 +461,6 @@
                         </div>
                     </div>
                 {% endfor %}
-
             </div>
         </div>
     </div>
